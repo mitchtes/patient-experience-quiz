@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Level Up Together: The Quest</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        body, html { 
+            height: 100%; width: 100%; overflow: hidden; 
+            background: #fdfaf5; font-family: 'Nunito', sans-serif; 
+        }
+
+        #qroot { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; }
+
+        .screen {
+            display: none; flex-direction: column; height: 100%; width: 100%;
+            padding: 24px; overflow-y: auto;
+        }
+
+        .screen.active { display: flex; animation: fadeUp 0.3s ease-out; }
+
+        /* --- UI ELEMENTS --- */
+        .q-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .q-counter { font-size: 14px; font-weight: 800; color: #b8a98a; text-transform: uppercase; }
+        .q-pip-row { display: flex; gap: 6px; }
+        .q-pip { width: 12px; height: 12px; border-radius: 50%; background: #ddd4c0; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: 0.3s; }
+        .q-pip.active { background: #60a5fa; transform: scale(1.2); }
+        .q-pip.done { background: #10b981; }
+
+        /* Graphic/Placeholder Style */
+        .graphic-container {
+            width: 100%; border-radius: 24px; box-shadow: 0 10px 0 #e8e0d0;
+            margin-bottom: 24px; object-fit: cover; background: #c8e8f4;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; color: #60a5fa; text-align: center; padding: 20px;
+        }
+        
+        .hero-graphic { height: 200px; }
+        .q-illo { height: 180px; }
+        .result-illo { height: 180px; width: 180px; margin: 0 auto 20px auto; border-radius: 24px; object-fit: cover; }
+
+        /* --- TEXT --- */
+        .intro-title { font-size: 32px; font-weight: 900; text-align: center; color: #2d3748; line-height: 1.1; margin-bottom: 15px; }
+        .intro-title span { color: #60a5fa; }
+        .q-text { font-size: 19px; font-weight: 800; color: #2d3748; margin-bottom: 24px; line-height: 1.4; text-align: center; }
+
+        /* --- OPTIONS --- */
+        .q-options { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+        .q-opt {
+            background: #fff; border: 3px solid #e8e0d0; border-radius: 20px;
+            padding: 20px; font-family: 'Nunito', sans-serif; font-size: 16px;
+            font-weight: 700; color: #4a5568; text-align: left; transition: 0.2s;
+            cursor: pointer; box-shadow: 0 4px 0 #e8e0d0;
+        }
+        .q-opt:active { transform: translateY(2px); box-shadow: 0 2px 0 #e8e0d0; }
+        .q-opt.selected { border-color: #60a5fa; background: #eff6ff; color: #2563eb; transform: scale(1.02); }
+
+        /* --- BUTTONS --- */
+        .btn-main {
+            background: #60a5fa; color: #fff; border: none; border-radius: 20px;
+            padding: 20px; font-size: 18px; font-weight: 900; width: 100%;
+            cursor: pointer; box-shadow: 0 8px 0 #2563eb; transition: 0.1s;
+        }
+        .btn-main:active { transform: translateY(4px); box-shadow: 0 4px 0 #2563eb; }
+
+        /* --- RESULTS --- */
+        .result-name { font-size: 32px; font-weight: 900; color: #1e293b; margin-bottom: 8px; text-align: center; }
+        .result-traits { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
+        .result-trait { background: #dbeafe; color: #1e40af; padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; }
+
+        .loot-box { background: #1e293b; color: white; padding: 20px; border-radius: 20px; margin-bottom: 24px; border-left: 6px solid #60a5fa; }
+        .btn-row { display: flex; gap: 12px; }
+        .btn-share { background: #25D366; box-shadow: 0 8px 0 #128C7E; } /* WhatsApp Brand Palette */
+        .btn-retry { background: #94a3b8; box-shadow: 0 8px 0 #64748b; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="qroot">
+    <div class="screen active" id="s-intro">
+        <h1 class="intro-title">Level Up <span>Together</span>!</h1>
+        <img id="intro-img" src="" class="graphic-container hero-graphic" alt="Hero Banner">
+        <p style="text-align: center; color: #64748b; margin-bottom: 30px; font-weight: 700; line-height: 1.5;">Find out which character you are by starting your quest for a better patient experience!</p>
+        <button class="btn-main" onclick="startQuiz()">Begin Quest ›</button>
+    </div>
+
+    <div id="s-question" class="screen">
+        <div class="q-top">
+            <span class="q-counter" id="q-counter">1 / 8</span>
+            <div class="q-pip-row" id="q-pips"></div>
+        </div>
+        <img id="q-illo" src="" class="graphic-container q-illo" alt="Scene">
+        <div class="q-text" id="q-text"></div>
+        <div id="q-opts" class="q-options"></div>
+    </div>
+
+    <div id="s-result" class="screen">
+        <img id="r-img" src="" class="graphic-container result-illo" alt="Result Character">
+        <div class="result-name" id="r-name"></div>
+        <div id="r-traits" class="result-traits"></div>
+        <p id="r-desc" style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6; text-align: center;"></p>
+        
+        <div class="loot-box">
+            <p style="color: #60a5fa; font-weight: 900; font-size: 12px; text-transform: uppercase; margin-bottom: 8px;">Quest Reward</p>
+            <p style="font-size: 14px;">Show us your character during our Guild Hall on the following dates to claim your loot!</p>
+            <p style="font-size: 14px; font-weight: 800; margin-top: 10px;">📅 23 Sep: SKCH | 📅 24 Sep: OCH</p>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn-main btn-retry" onclick="restart()">Retry</button>
+            <button class="btn-main btn-share" onclick="shareToWhatsApp()">Share to WhatsApp</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ==========================================
+// 🛠️ LOCAL IMAGE REPOSITORY CONFIGURATION
+// Assumes assets are stored in: Desktop/patient-experience-quiz/images/
+// ==========================================
+const QUIZ_IMAGES = {
+    // Welcome / Landing Screen
+    introBanner: "images/hero-banner.png",
+
+    // Question Scene Visuals (800 x 450px recommended)
+    scenes: [
+        "images/scene1.jpg", 
+        "images/scene2.jpg", 
+        "images/scene3.jpg", 
+        "images/scene4.jpg", 
+        "images/scene5.jpg", 
+        "images/scene6.jpg", 
+        "images/scene7.jpg", 
+        "images/scene8.jpg"
+    ],
+
+    // Character Results Visuals (512 x 512px square recommended)
+    characters: {
+        anchor: "images/anchor.png",
+        catalyst: "images/catalyst.png",
+        navigator: "images/navigator.png",
+        wildcard: "images/wildcard.png"
+    }
+};
+
+// --- INITIALIZE INTRO BANNER ---
+document.getElementById('intro-img').src = QUIZ_IMAGES.introBanner;
+
+
+// --- GAME DATA STRUCTURE ---
+const CHARS = {
+    anchor: { 
+        name: "The Anchor", 
+        img: QUIZ_IMAGES.characters.anchor,
+        desc: "Steady and dependable, you are the bedrock of the team. You ensure no one feels adrift, providing the calm support both patients and colleagues need.",
+        traits: ["Reliable", "Empathetic", "Supportive"]
+    },
+    catalyst: { 
+        name: "The Catalyst", 
+        img: QUIZ_IMAGES.characters.catalyst,
+        desc: "You spark momentum. When the workload gets intense, you dive in with decisive energy to pull the team forward and get things done.",
+        traits: ["Action-Oriented", "Bold", "Energetic"]
+    },
+    navigator: { 
+        name: "The Navigator", 
+        img: QUIZ_IMAGES.characters.navigator,
+        desc: "Strategic and sharp, you see the path ahead. You connect the dots and steer the team around obstacles before they become problems.",
+        traits: ["Strategic", "Perceptive", "Calm"]
+    },
+    wildcard: { 
+        name: "The Wildcard", 
+        img: QUIZ_IMAGES.characters.wildcard,
+        desc: "You break the mould. You bring quirky ideas and fresh energy that unlock possibilities others didn't see coming.",
+        traits: ["Creative", "Adaptable", "Inspiring"]
+    }
+};
+
+const SCENES = [
+    { text: "Your morning begins! You arrive at your post and check the day's 'Quest Board'. How do you start?", img: QUIZ_IMAGES.scenes[0], opts: [{t:"Greet the party and make sure everyone is doing well.", ty:"anchor"}, {t:"Review the schedule to map out the top priorities.", ty:"navigator"}]},
+    { text: "You spot a visitor looking confused at a directory in the hallway. You:", img: QUIZ_IMAGES.scenes[1], opts: [{t:"Walk over to offer a friendly smile and personal directions.", ty:"anchor"}, {t:"Point out the most efficient shortcut to their destination.", ty:"navigator"}]},
+    { text: "A teammate's 'Energy Bar' is looking a bit low—they look swamped. You:", img: QUIZ_IMAGES.scenes[2], opts: [{t:"Offer a word of encouragement to boost the vibe.", ty:"anchor"}, {t:"Jump in and clear a task from their list immediately.", ty:"catalyst"}]},
+    { text: "A bottleneck appears! A system glitch is slowing everyone down. You:", img: QUIZ_IMAGES.scenes[3], opts: [{t:"Find a quick workaround so the team can keep moving.", ty:"catalyst"}, {t:"Suggest a creative new 'patch' to improve the system.", ty:"wildcard"}]},
+    { text: "A 'New Player' (a new hire) joins your team. Your first move?", img: QUIZ_IMAGES.scenes[4], opts: [{t:"Show them around and make them feel part of the family.", ty:"anchor"}, {t:"Hand them a tool and show them where the action is.", ty:"catalyst"}]},
+    { text: "A surprise 'Side Quest' appears: an urgent request for a quick, creative idea for the office. You:", img: QUIZ_IMAGES.scenes[5], opts: [{t:"Search for a practical, step-by-step way to organize it.", ty:"navigator"}, {t:"Propose a fun, out-of-the-box idea to delight everyone.", ty:"wildcard"}]},
+    { text: "A 'Boss Battle' misunderstanding with a patient or visitor occurs. You:", img: QUIZ_IMAGES.scenes[6], opts: [{t:"Listen to all sides and find the bridge to agreement.", ty:"anchor"}, {t:"Look for an unexpected way to resolve it creatively.", ty:"wildcard"}]},
+    { text: "The day is done! Quest Complete. How do you prepare for tomorrow?", img: QUIZ_IMAGES.scenes[7], opts: [{t:"Check the 'stats' to see what can be improved.", ty:"navigator"}, {t:"Rally the party for a quick 'Victory Huddle'.", ty:"catalyst"}]}
+];
+
+let cur = 0, answers = [];
+
+function startQuiz() { cur = 0; answers = []; showS('s-question'); renderQ(); }
+function showS(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function renderQ() {
+    const q = SCENES[cur];
+    document.getElementById('q-counter').textContent = `${cur + 1} / ${SCENES.length}`;
+    document.getElementById('q-text').textContent = q.text;
+    document.getElementById('q-illo').src = q.img;
+    document.getElementById('q-pips').innerHTML = SCENES.map((_, i) => `<div class="q-pip ${i < cur ? 'done' : (i === cur ? 'active' : '')}"></div>`).join('');
+    document.getElementById('q-opts').innerHTML = q.opts.map((o, i) => `<button class="q-opt" onclick="pick(${i}, '${o.ty}')">${o.t}</button>`).join('');
+}
+
+function pick(i, type) {
+    document.querySelectorAll('.q-opt')[i].classList.add('selected');
+    answers[cur] = type;
+    setTimeout(() => {
+        if (cur < SCENES.length - 1) { cur++; renderQ(); } 
+        else { showResult(); }
+    }, 450);
+}
+
+function showResult() {
+    const counts = answers.reduce((acc, t) => { acc[t] = (acc[t] || 0) + 1; return acc; }, {});
+    const win = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+    const c = CHARS[win];
+
+    document.getElementById('r-img').src = c.img;
+    document.getElementById('r-name').textContent = c.name;
+    document.getElementById('r-desc').textContent = c.desc;
+    document.getElementById('r-traits').innerHTML = c.traits.map(t => `<span class="result-trait">${t}</span>`).join('');
+    window.currentResult = c;
+    showS('s-result');
+}
+
+function restart() { startQuiz(); }
+
+function shareToWhatsApp() {
+    const c = window.currentResult;
+    
+    // 💡 REMINDER: Replace 'yourusername' with your actual GitHub username once deployed!
+    const siteUrl = 'https://yourusername.github.io/patient-experience-quiz/';
+    
+    // Formats a clean, stylized WhatsApp text block using native markdown triggers
+    const messageText = `🎮 *Level Up Together: The Quest* 🎮\n\nI took the Patient Experience Week quiz and my character is: *${c.name.toUpperCase()}*! \n\n✨ _"${c.desc}"_\n\nFind out your character type and claim your loot at the Guild Hall! 👉 ${siteUrl}`;
+    
+    // Safely parse URL paths for distribution
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(messageText)}`;
+    
+    window.open(whatsappUrl, '_blank');
+}
+</script>
+</body>
+</html>
