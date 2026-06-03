@@ -11,139 +11,110 @@
         
         body, html { 
             height: 100%; width: 100%; overflow: hidden; 
-            background: #e2e8f0; font-family: 'Nunito', sans-serif;
-            display: flex; justify-content: center; align-items: center;
+            background: #fdfaf5; font-family: 'Nunito', sans-serif; 
         }
 
-        /* Retro Game Boy / Handheld Console Frame Wrapper */
-        #qroot { 
-            width: 100%; height: 100%; max-width: 480px; max-height: 900px;
-            background: #fdfaf5; display: flex; flex-direction: column; 
-            position: relative; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border: 8px solid #cbd5e1; border-radius: 28px;
-        }
-
-        /* Subtle console screen accent border decoration */
-        #qroot::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
-            background: #94a3b8; border-top-left-radius: 18px; border-top-right-radius: 18px; z-index: 10;
-        }
+        #qroot { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; }
 
         .screen {
             display: none; flex-direction: column; height: 100%; width: 100%;
-            padding: 20px; overflow-y: auto; justify-content: space-between;
+            padding: 24px; overflow-y: auto;
         }
 
-        .screen.active { display: flex; animation: fadeUp 0.25s ease-out; }
+        .screen.active { display: flex; animation: fadeUp 0.3s ease-out; }
 
         /* --- UI ELEMENTS --- */
-        .q-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-        .q-counter { font-size: 13px; font-weight: 800; color: #b8a98a; text-transform: uppercase; letter-spacing: 0.5px; }
-        .q-pip-row { display: flex; gap: 5px; }
-        .q-pip { width: 10px; height: 10px; border-radius: 50%; background: #ddd4c0; border: 1.5px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: 0.3s; }
+        .q-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .q-counter { font-size: 14px; font-weight: 800; color: #b8a98a; text-transform: uppercase; }
+        .q-pip-row { display: flex; gap: 6px; }
+        .q-pip { width: 12px; height: 12px; border-radius: 50%; background: #ddd4c0; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: 0.3s; }
         .q-pip.active { background: #60a5fa; transform: scale(1.2); }
         .q-pip.done { background: #10b981; }
 
-        /* Graphic/Adaptive Asset Container */
+        /* Graphic/Placeholder Style */
         .graphic-container {
-            width: 100%; border-radius: 20px; box-shadow: 0 6px 0 #e8e0d0;
-            margin-bottom: 16px; object-fit: cover; background: #c8e8f4;
-            display: block; flex-shrink: 0;
+            width: 100%; border-radius: 24px; box-shadow: 0 10px 0 #e8e0d0;
+            margin-bottom: 24px; object-fit: cover; background: #c8e8f4;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; color: #60a5fa; text-align: center; padding: 20px;
         }
         
-        /* Fixed mobile layout responsiveness: avoids cutting off layout or overflowing */
-        .hero-graphic { max-height: 32vh; width: 100%; }
-        .q-illo { max-height: 30vh; width: 100%; }
-        .result-illo { max-height: 35vh; width: 100%; object-fit: cover; border-radius: 20px; margin-bottom: 14px; }
+        .hero-graphic { height: 200px; }
+        .q-illo { height: 180px; }
+        .result-illo { height: 180px; width: 180px; margin: 0 auto 20px auto; border-radius: 24px; object-fit: cover; }
 
-        /* --- TEXT STYLES --- */
-        .header-group { text-align: center; margin-bottom: 12px; flex-shrink: 0; }
-        .org-header { font-size: 13px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; }
-        .intro-title { font-size: 28px; font-weight: 900; color: #2d3748; line-height: 1.1; }
+        /* --- TEXT --- */
+        .intro-title { font-size: 32px; font-weight: 900; text-align: center; color: #2d3748; line-height: 1.1; margin-bottom: 15px; }
         .intro-title span { color: #60a5fa; }
-        
-        .q-text { font-size: 17px; font-weight: 800; color: #2d3748; margin-bottom: 16px; line-height: 1.35; text-align: center; flex-shrink: 0; }
+        .q-text { font-size: 19px; font-weight: 800; color: #2d3748; margin-bottom: 24px; line-height: 1.4; text-align: center; }
 
-        /* --- INTERACTIVE OPTIONS --- */
-        .q-options { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-bottom: 10px; }
+        /* --- OPTIONS --- */
+        .q-options { display: flex; flex-direction: column; gap: 14px; flex: 1; }
         .q-opt {
-            background: #fff; border: 3px solid #e8e0d0; border-radius: 16px;
-            padding: 14px 18px; font-family: 'Nunito', sans-serif; font-size: 15px;
-            font-weight: 700; color: #4a5568; text-align: left; transition: 0.15s;
-            cursor: pointer; box-shadow: 0 4px 0 #e8e0d0; width: 100%;
+            background: #fff; border: 3px solid #e8e0d0; border-radius: 20px;
+            padding: 20px; font-family: 'Nunito', sans-serif; font-size: 16px;
+            font-weight: 700; color: #4a5568; text-align: left; transition: 0.2s;
+            cursor: pointer; box-shadow: 0 4px 0 #e8e0d0;
         }
         .q-opt:active { transform: translateY(2px); box-shadow: 0 2px 0 #e8e0d0; }
-        .q-opt.selected { border-color: #60a5fa; background: #eff6ff; color: #2563eb; transform: scale(1.01); }
+        .q-opt.selected { border-color: #60a5fa; background: #eff6ff; color: #2563eb; transform: scale(1.02); }
 
-        /* --- CHUNKY CONTROLS --- */
+        /* --- BUTTONS --- */
         .btn-main {
-            background: #60a5fa; color: #fff; border: none; border-radius: 16px;
-            padding: 16px; font-size: 17px; font-weight: 900; width: 100%;
-            cursor: pointer; box-shadow: 0 6px 0 #2563eb; transition: 0.1s;
-            flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.5px;
+            background: #60a5fa; color: #fff; border: none; border-radius: 20px;
+            padding: 20px; font-size: 18px; font-weight: 900; width: 100%;
+            cursor: pointer; box-shadow: 0 8px 0 #2563eb; transition: 0.1s;
         }
-        .btn-main:active { transform: translateY(3px); box-shadow: 0 3px 0 #2563eb; }
+        .btn-main:active { transform: translateY(4px); box-shadow: 0 4px 0 #2563eb; }
 
-        /* --- RESULTS VIEWS --- */
-        .result-content { text-align: center; width: 100%; overflow-y: auto; padding-bottom: 10px; }
-        .result-name { font-size: 28px; font-weight: 900; color: #1e293b; margin-bottom: 6px; text-align: center; }
-        .result-traits { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; justify-content: center; }
-        .result-trait { background: #dbeafe; color: #1e40af; padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; }
+        /* --- RESULTS --- */
+        .result-name { font-size: 32px; font-weight: 900; color: #1e293b; margin-bottom: 8px; text-align: center; }
+        .result-traits { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
+        .result-trait { background: #dbeafe; color: #1e40af; padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; }
 
-        .loot-box { background: #1e293b; color: white; padding: 14px 18px; border-radius: 16px; margin-bottom: 16px; border-left: 6px solid #60a5fa; text-align: left; }
-        .btn-row { display: flex; gap: 10px; width: 100%; flex-shrink: 0; }
-        .btn-share { background: #25D366; box-shadow: 0 6px 0 #128C7E; } 
-        .btn-retry { background: #94a3b8; box-shadow: 0 6px 0 #64748b; }
+        .loot-box { background: #1e293b; color: white; padding: 20px; border-radius: 20px; margin-bottom: 24px; border-left: 6px solid #60a5fa; }
+        .btn-row { display: flex; gap: 12px; }
+        .btn-share { background: #25D366; box-shadow: 0 8px 0 #128C7E; } /* WhatsApp Brand Palette */
+        .btn-retry { background: #94a3b8; box-shadow: 0 8px 0 #64748b; }
 
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div id="qroot">
     <div class="screen active" id="s-intro">
-        <div class="header-group">
-            <div class="org-header">SCH Patient Experience Week 2026</div>
-            <h1 class="intro-title">Level Up <span>Together</span>!</h1>
-        </div>
+        <h1 class="intro-title">Level Up <span>Together</span>!</h1>
         <img id="intro-img" src="" class="graphic-container hero-graphic" alt="Hero Banner">
-        <p style="text-align: center; color: #64748b; font-weight: 700; line-height: 1.4; font-size: 15px; margin-bottom: 16px; padding: 0 8px;">
-            Find out which character you are by starting your quest for a better patient experience!
-        </p>
+        <p style="text-align: center; color: #64748b; margin-bottom: 30px; font-weight: 700; line-height: 1.5;">Find out which character you are by starting your quest for a better patient experience!</p>
         <button class="btn-main" onclick="startQuiz()">Begin Quest ›</button>
     </div>
 
     <div id="s-question" class="screen">
-        <div>
-            <div class="q-top">
-                <span class="q-counter" id="q-counter">1 / 8</span>
-                <div class="q-pip-row" id="q-pips"></div>
-            </div>
-            <img id="q-illo" src="" class="graphic-container q-illo" alt="Scene">
-            <div class="q-text" id="q-text"></div>
+        <div class="q-top">
+            <span class="q-counter" id="q-counter">1 / 8</span>
+            <div class="q-pip-row" id="q-pips"></div>
         </div>
+        <img id="q-illo" src="" class="graphic-container q-illo" alt="Scene">
+        <div class="q-text" id="q-text"></div>
         <div id="q-opts" class="q-options"></div>
     </div>
 
     <div id="s-result" class="screen">
-        <div class="result-content">
-            <img id="r-img" src="" class="graphic-container result-illo" alt="Result Character">
-            <div class="result-name" id="r-name"></div>
-            <div id="r-traits" class="result-traits"></div>
-            <p id="r-desc" style="font-size: 14px; color: #475569; line-height: 1.4; text-align: center; padding: 0 6px;"></p>
-        </div>
+        <img id="r-img" src="" class="graphic-container result-illo" alt="Result Character">
+        <div class="result-name" id="r-name"></div>
+        <div id="r-traits" class="result-traits"></div>
+        <p id="r-desc" style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6; text-align: center;"></p>
         
-        <div>
-            <div class="loot-box">
-                <p style="color: #60a5fa; font-weight: 900; font-size: 11px; text-transform: uppercase; margin-bottom: 4px;">Quest Reward</p>
-                <p style="font-size: 13px; line-height: 1.3;">Show us your character during our Guild Hall on the following dates to claim your loot!</p>
-                <p style="font-size: 13px; font-weight: 800; margin-top: 6px;">📅 23 Sep: SKCH | 📅 24 Sep: OCH</p>
-            </div>
+        <div class="loot-box">
+            <p style="color: #60a5fa; font-weight: 900; font-size: 12px; text-transform: uppercase; margin-bottom: 8px;">Quest Reward</p>
+            <p style="font-size: 14px;">Show us your character during our Guild Hall on the following dates to claim your loot!</p>
+            <p style="font-size: 14px; font-weight: 800; margin-top: 10px;">📅 23 Sep: SKCH | 📅 24 Sep: OCH</p>
+        </div>
 
-            <div class="btn-row">
-                <button class="btn-main btn-retry" onclick="restart()">Retry</button>
-                <button class="btn-main btn-share" onclick="shareToWhatsApp()">Share to WhatsApp</button>
-            </div>
+        <div class="btn-row">
+            <button class="btn-main btn-retry" onclick="restart()">Retry</button>
+            <button class="btn-main btn-share" onclick="shareToWhatsApp()">Share to WhatsApp</button>
         </div>
     </div>
 </div>
@@ -264,9 +235,14 @@ function restart() { startQuiz(); }
 
 function shareToWhatsApp() {
     const c = window.currentResult;
+    
+    // 💡 REMINDER: Replace 'yourusername' with your actual GitHub username once deployed!
     const siteUrl = 'https://for.sg/pewquiz';
     
-    const messageText = `🎮 *SCH Patient Experience Week 2026* 🎮\n\nI took the quest and discovered my character type is: *${c.name.toUpperCase()}*! \n\n✨ _"${c.desc}"_\n\nFind out your character type and claim your loot at the Guild Hall! 👉 ${siteUrl}`;
+    // Formats a clean, stylized WhatsApp text block using native markdown triggers
+    const messageText = `🎮 *Level Up Together: The Quest* 🎮\n\nI took the Patient Experience Week quiz and my character is: *${c.name.toUpperCase()}*! \n\n✨ _"${c.desc}"_\n\nFind out your character type and claim your loot at the Guild Hall! 👉 ${siteUrl}`;
+    
+    // Safely parse URL paths for distribution
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(messageText)}`;
     
     window.open(whatsappUrl, '_blank');
