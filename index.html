@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Level Up Together: The Quest</title>
+    <title>SCH Patient Experience Week 2026 | Level Up Together: The Quest</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght=400;600;700;800;900&display=swap');
         
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
@@ -34,17 +34,26 @@
         /* Graphic/Placeholder Style */
         .graphic-container {
             width: 100%; border-radius: 24px; box-shadow: 0 10px 0 #e8e0d0;
-            margin-bottom: 24px; object-fit: cover; background: #c8e8f4;
+            margin-bottom: 24px; background: #c8e8f4;
             display: flex; align-items: center; justify-content: center;
             font-weight: 900; color: #60a5fa; text-align: center; padding: 20px;
         }
         
-        .hero-graphic { height: 200px; }
-        .q-illo { height: 180px; }
-        .result-illo { height: 180px; width: 180px; margin: 0 auto 20px auto; border-radius: 24px; object-fit: cover; }
+        .hero-graphic { height: 200px; object-fit: cover; }
+        .q-illo { height: 180px; object-fit: cover; }
+        
+        /* Fixed final result image so it keeps aspect ratio instead of squishing */
+        .result-illo { 
+            height: 180px; 
+            width: 180px; 
+            margin: 0 auto 20px auto; 
+            border-radius: 24px; 
+            object-fit: contain; 
+            background: #c8e8f4;
+        }
 
         /* --- TEXT --- */
-        .intro-title { font-size: 32px; font-weight: 900; text-align: center; color: #2d3748; line-height: 1.1; margin-bottom: 15px; }
+        .intro-title { font-size: 28px; font-weight: 900; text-align: center; color: #2d3748; line-height: 1.2; margin-bottom: 15px; }
         .intro-title span { color: #60a5fa; }
         .q-text { font-size: 19px; font-weight: 800; color: #2d3748; margin-bottom: 24px; line-height: 1.4; text-align: center; }
 
@@ -84,7 +93,7 @@
 
 <div id="qroot">
     <div class="screen active" id="s-intro">
-        <h1 class="intro-title">Level Up <span>Together</span>!</h1>
+        <h1 class="intro-title">SCH Patient Experience Week 2026:<br>Level Up <span>Together</span>!</h1>
         <img id="intro-img" src="" class="graphic-container hero-graphic" alt="Hero Banner">
         <p style="text-align: center; color: #64748b; margin-bottom: 30px; font-weight: 700; line-height: 1.5;">Find out which character you are by starting your quest for a better patient experience!</p>
         <button class="btn-main" onclick="startQuiz()">Begin Quest ›</button>
@@ -101,7 +110,7 @@
     </div>
 
     <div id="s-result" class="screen">
-        <img id="r-img" src="" class="graphic-container result-illo" alt="Result Character">
+        <img id="r-img" src="" class="result-illo" alt="Result Character">
         <div class="result-name" id="r-name"></div>
         <div id="r-traits" class="result-traits"></div>
         <p id="r-desc" style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6; text-align: center;"></p>
@@ -235,16 +244,9 @@ function restart() { startQuiz(); }
 
 function shareToWhatsApp() {
     const c = window.currentResult;
-    
-    // 💡 REMINDER: Replace 'yourusername' with your actual GitHub username once deployed!
     const siteUrl = 'https://for.sg/pewquiz';
-    
-    // Formats a clean, stylized WhatsApp text block using native markdown triggers
-    const messageText = `🎮 *Level Up Together: The Quest* 🎮\n\nI took the Patient Experience Week quiz and my character is: *${c.name.toUpperCase()}*! \n\n✨ _"${c.desc}"_\n\nFind out your character type and claim your loot at the Guild Hall! 👉 ${siteUrl}`;
-    
-    // Safely parse URL paths for distribution
+    const messageText = `🎮 *Level Up Together: The Quest* 🎮\n\nI took the SCH Patient Experience Week quiz and my character is: *${c.name.toUpperCase()}*! \n\n✨ _"${c.desc}"_\n\nFind out your character type and claim your loot at the Guild Hall! 👉 ${siteUrl}`;
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(messageText)}`;
-    
     window.open(whatsappUrl, '_blank');
 }
 </script>
